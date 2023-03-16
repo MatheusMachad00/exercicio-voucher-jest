@@ -86,6 +86,31 @@ describe("Voucher service unit tests", () => {
     expect(order.applied).toBe(false);
   });
 
+  it("Should return data after apply a voucher", async () => {
+    const voucher = {
+      id: 1,
+      code: "test",
+      discount: 50,
+      used: false,
+    };
+    const amout = 200;
+
+    jest
+      .spyOn(voucherRepository, "getVoucherByCode")
+      .mockImplementationOnce((): any => {
+        return voucher;
+      });
+
+    const result = await voucherService.applyVoucher(voucher.code, amout);
+
+    expect(result).toMatchObject({
+      amount: 200,
+      discount: 50,
+      finalAmount: 100,
+      applied: true,
+    });
+  });
+
   /* it("Should not be able to use a voucher that was used", async () => {
 
     const voucher = {
@@ -104,3 +129,10 @@ describe("Voucher service unit tests", () => {
 
   }); */
 });
+
+/* {
+  "amount": 200,
+  "discount": 50,
+  "finalAmount": 100,
+  "applied": true
+} */
