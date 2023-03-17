@@ -21,11 +21,25 @@ describe("Voucher service unit tests", () => {
     expect(result).toBeUndefined();
   });
 
-  it("Should not create a new voucher", async () => {
+  it("Should not accept a value greater than 100", async () => {
     expect(async () => {
       const voucher = {
         code: "test",
         discount: 200,
+      };
+
+      jest
+        .spyOn(voucherRepository, "getVoucherByCode")
+        .mockReturnValueOnce(null);
+      await voucherService.createVoucher(voucher.code, voucher.discount);
+    }).rejects.toBeInstanceOf(Error);
+  });
+
+  it("Should not accept a value less than 1", async () => {
+    expect(async () => {
+      const voucher = {
+        code: "test",
+        discount: -200,
       };
 
       jest
@@ -127,7 +141,7 @@ describe("Voucher service unit tests", () => {
       });
 
     const result = await voucherService.applyVoucher(voucher.code, amout);
-    
+
     expect(result).toMatchObject({
       amount: 200,
       discount: 50,
