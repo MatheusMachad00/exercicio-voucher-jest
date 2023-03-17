@@ -111,14 +111,14 @@ describe("Voucher service unit tests", () => {
     });
   });
 
-  /* it("Should not be able to use a voucher that was used", async () => {
-
+  it("Should not be able to use a voucher that was used", async () => {
     const voucher = {
       id: 1,
       code: "test",
-      discount: 30,
-      used: false,
+      discount: 50,
+      used: true,
     };
+    const amout = 200;
 
     jest
       .spyOn(voucherRepository, "getVoucherByCode")
@@ -126,13 +126,13 @@ describe("Voucher service unit tests", () => {
         return voucher;
       });
 
-
-  }); */
+    const result = await voucherService.applyVoucher(voucher.code, amout);
+    
+    expect(result).toMatchObject({
+      amount: 200,
+      discount: 50,
+      finalAmount: 200,
+      applied: false,
+    });
+  });
 });
-
-/* {
-  "amount": 200,
-  "discount": 50,
-  "finalAmount": 100,
-  "applied": true
-} */
