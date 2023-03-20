@@ -18,7 +18,7 @@ describe("Voucher service unit tests", () => {
       voucher.code,
       voucher.discount
     );
-    expect(result).toBeUndefined();
+    expect(voucherRepository.createVoucher).toBeCalled();
   });
 
   it("Should not accept a value greater than 100", async () => {
